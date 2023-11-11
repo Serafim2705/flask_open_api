@@ -1,0 +1,558 @@
+openapi: 3.0.3
+info:
+  title: Super Pizza!
+  description: Just Pizza!
+  termsOfService: http://swagger.io/terms/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://localhost/api/v3
+tags:
+- name: pizza
+  description: Everything about your pizza
+  externalDocs:
+    description: Find out more
+    url: http://swagger.io
+- name: store
+  description: Access to pizza orders
+  externalDocs:
+    description: Find out more about our store
+    url: http://swagger.io
+
+paths:
+  /pizza:
+    put:
+      tags:
+      - pizza
+      summary: Update an existing pizza
+      description: Update an existing pizza by Id
+      operationId: update_pizza
+      requestBody:
+        description: Update an existent pizza in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pizza'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Pizza'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pizza'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pizza'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pizza'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Pizza not found
+        "405":
+          description: Validation exception
+#      security:
+#      - pizzastore_auth:
+#        - write:pizza
+#        - read:pizza
+      x-openapi-router-controller: swagger_server.controllers.pizza_controller
+    post:
+      tags:
+      - pizza
+      summary: Add a new Pizza to the store
+      description: Add a new Pizza to the store
+      operationId: add_pizza
+      requestBody:
+        description: Create a new pizza in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pizza'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Pizza'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pizza'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pizza'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pizza'
+        "405":
+          description: Invalid input
+#      security:
+#      - pizzastore_auth:
+#        - write:pizza
+#        - read:pizza
+      x-openapi-router-controller: swagger_server.controllers.pizza_controller
+  /pizza/:
+    get:
+      tags:
+      - pizza
+      summary: Show all pizzas
+      description: Returns all pizzas
+      operationId: pizza_get
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pizzas'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pizzas'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: pizzas not found
+#      security:
+#      - api_key: []
+#      - pizzastore_auth:
+#        - write:pizzas
+#        - read:pizzas
+      x-openapi-router-controller: swagger_server.controllers.pizza_controller
+  /pizza/{pizzaId}:
+    get:
+      tags:
+      - pizza
+      summary: Find pizza by ID
+      description: Returns a single pizza
+      operationId: get_pizza_by_id
+      parameters:
+      - name: pizzaId
+        in: path
+        description: ID of pizza to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pizza'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pizza'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: pizza not found
+#      security:
+#      - api_key: []
+#      - pizzastore_auth:
+#        - write:pizza
+#        - read:pizza
+      x-openapi-router-controller: swagger_server.controllers.pizza_controller
+#    post:
+#      tags:
+#      - pizza
+#      summary: Updates a pizza in the store with form data
+#      description: ""
+#      operationId: update_pizza_with_form
+#      parameters:
+#      - name: pizzaId
+#        in: path
+#        description: ID of pizza that needs to be updated
+#        required: true
+#        style: simple
+#        explode: false
+#        schema:
+#          type: integer
+#          format: int64
+#      - name: name
+#        in: query
+#        description: Name of pizza that needs to be updated
+#        required: false
+#        style: form
+#        explode: true
+#        schema:
+#          type: string
+#      - name: status
+#        in: query
+#        description: Status of pizza that needs to be updated
+#        required: false
+#        style: form
+#        explode: true
+#        schema:
+#          type: string
+#      responses:
+#        "405":
+#          description: Invalid input
+#      security:
+#      - pizzastore_auth:
+#        - write:pizza
+#        - read:pizza
+#      x-openapi-router-controller: swagger_server.controllers.pizza_controller
+    delete:
+      tags:
+      - pizza
+      summary: Deletes a pizza
+      description: delete a pizza
+      operationId: delete_pizza
+      parameters:
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: pizzaId
+        in: path
+        description: pizza id to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "400":
+          description: Invalid pizza value
+#      security:
+#      - pizzastore_auth:
+#        - write:pizza
+#        - read:pizza
+      x-openapi-router-controller: swagger_server.controllers.pizza_controller
+#  /pizza/{pizzaId}/uploadImage:
+#    post:
+#      tags:
+#      - pizza
+#      summary: uploads an image
+#      description: ""
+#      operationId: upload_file
+#      parameters:
+#      - name: pizzaId
+#        in: path
+#        description: ID of pizza to update
+#        required: true
+#        style: simple
+#        explode: false
+#        schema:
+#          type: integer
+#          format: int64
+#      - name: additionalMetadata
+#        in: query
+#        description: Additional Metadata
+#        required: false
+#        style: form
+#        explode: true
+#        schema:
+#          type: string
+#      requestBody:
+#        content:
+#          application/octet-stream:
+#            schema:
+#              type: string
+#              format: binary
+#      responses:
+#        "200":
+#          description: successful operation
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/ApiResponse'
+#      security:
+#      - pizzastore_auth:
+#        - write:pizza
+#        - read:pizza
+#      x-openapi-router-controller: swagger_server.controllers.pizza_controller
+#  /store/CreatePosition:
+#    post:
+#      tags:
+#      - store
+#      summary: Create positions for order
+#      description: Place a new position in the order
+#      operationId: store_create_position_post
+#      requestBody:
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/PositionInOrder'
+#          application/xml:
+#            schema:
+#              $ref: '#/components/schemas/PositionInOrder'
+#          application/x-www-form-urlencoded:
+#            schema:
+#              $ref: '#/components/schemas/PositionInOrder'
+#      responses:
+#        "200":
+#          description: successful operation
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/PositionInOrder'
+#        "405":
+#          description: Invalid input
+#      x-openapi-router-controller: swagger_server.controllers.store_controller
+  /store/order:
+    post:
+      tags:
+      - store
+      summary: Place an order for a pizza
+      description: Place a new order in the store
+      operationId: place_order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "405":
+          description: Invalid input
+      x-openapi-router-controller: swagger_server.controllers.store_controller
+  /store/order/{orderId}:
+    get:
+      tags:
+      - store
+      summary: show all orders
+      description: For valid response try integer IDs with value <= 5 or > 10. Other
+        values will generate exceptions.
+      operationId: get_order_by_id
+#      parameters:
+#      - name: orderId
+#        in: path
+#        description: ID of order that needs to be fetched
+#        required: true
+#        style: simple
+#        explode: false
+#        schema:
+#          type: integer
+#          format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Order not found
+      x-openapi-router-controller: swagger_server.controllers.store_controller
+    delete:
+      tags:
+      - store
+      summary: Delete purchase order by ID
+      description: For valid response try integer IDs with value < 1000. Anything
+        above 1000 or nonintegers will generate API errors
+      operationId: delete_order
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of the order that needs to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+#          format: int64
+      responses:
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Order not found
+      x-openapi-router-controller: swagger_server.controllers.store_controller
+
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+#          format: int64
+          example: db7bfaf5-ce8a-474c-bb6f-c14dbc40db77
+        address:
+          type: string
+        Positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PositionInOrder'
+
+      example:
+#        Price: 0.80082819046101150206595775671303272247314453125
+        Positions:
+        - quantity: 2
+#          Discount: 10
+#          Price: 100
+          PizzaId: 1
+        - quantity: 1
+#          Discount: 10
+#          Price: 100
+          PizzaId: 2
+        address: pushkina22_305
+#        id: 10
+#        shipDate: 2000-01-23T04:56:07.000+00:00
+#        complete: true
+#        status: approved
+
+      xml:
+        name: order
+    PositionInOrder:
+      type: object
+      properties:
+        PizzaId:
+          type: object
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+#        Price:
+#          type: number
+#          format: double
+#          example: 100
+#        Discount:
+#          type: number
+#          format: double
+#          example: 10
+      example:
+        quantity: 7
+#        Discount: 10
+#        Price: 100
+        PizzaId: {}
+
+    Pizza:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: peperoni
+        price:
+          type: number
+          format: double
+          example: 100
+        photoUrls:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            type: string
+            xml:
+              name: photoUrl
+      example:
+        photoUrls:
+        - photoUrls
+        - photoUrls
+        name: peperoni
+        price: 100
+        id: 10
+      xml:
+        name: pizza
+    Pizzas:
+      properties:
+        AllPizzas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pizza'
+      example:
+        AllPizzas:
+        - photoUrls:
+          - photoUrls
+          - photoUrls
+          name: peperoni2
+          id: 11
+          price: 100
+        - photoUrls:
+          - photoUrls
+          - photoUrls
+          name: peperoni
+          id: 10
+          price: 100
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      example:
+        code: 0
+        type: type
+        message: message
+      xml:
+        name: '##default'
+  requestBodies:
+    Pizza:
+      description: Pizza object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Pizza'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Pizza'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  securitySchemes:
+    pizzastore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://localhost/oauth/authorize
+          scopes:
+            write:pizza: modify pizza in your account
+            read:pizza: read your pizza
+      x-tokenInfoFunc: swagger_server.controllers.authorization_controller.check_pizzastore_auth
+      x-scopeValidateFunc: swagger_server.controllers.authorization_controller.validate_scope_pizzastore_auth
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      x-apikeyInfoFunc: swagger_server.controllers.authorization_controller.check_api_key
+
